@@ -3,13 +3,13 @@
 #include <fstream>
 #include "st2.h"
 
-
+using namespace std;
 int main(){
-    std::ifstream input;
-    input.open("file.txt");
     stack *st = new stack;
-    tree *t = BuildTree();
-    std::cout << vuvod(t, &st);
-    std::cout << "\n";
-    vuvod(st);
+    ifstream input;
+    input.open("file.txt");
+
+    tree *t = BuildTree(&input);
+    std::cout << vuvod_v1(t, &st) << std::endl;
+    vuvod_st(st);
 }

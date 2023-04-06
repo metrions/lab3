@@ -8,49 +8,54 @@ struct tree{
     tree *right, *left;
 
 };
+using namespace std;
 
-tree *BuildTree()
-{
-    char c = 0;
-    scanf("%c", &c);
+tree *BuildTree(ifstream *a)
+{  
+    while (!(*a).eof()){
+    char c;
+    (*a) >> c;
     switch(c)
     {
         case '(': {
             tree *t = new tree;
-            scanf("%c", &c);
+            (*a) >> c;
             t->el = c;
-            t->left = BuildTree();
-            t->right = BuildTree();
+            t->left = BuildTree(a);
+            t->right = BuildTree(a);
             //std::cout << t->el;
-            scanf("%c", &c);
+            (*a) >> c;
             return t;
     }
-        case ',': return BuildTree();
+        case ',': return BuildTree(a);
         case '0': return NULL;
-        default: return BuildTree();
+        default: return BuildTree(a);
     }
+    return NULL;}
     return NULL;
 }
 
-int findtree(tree *t, char x){
+int vuvod_v1(tree *t, stack **s){
     int f = 0;
-    if (t->el == x){
-        return 1;
+    if (t->right == NULL && t->left == NULL){
+        f = f + 1;
+        *s = push(t->el, *s);
+        return f;
     }
-    if (f!= 1 && t->right != NULL && t->left != NULL){
-        if (t->left != NULL){
-            t = t->left;
-            f = findtree(t, x);}
-        if (t->right != NULL){
-            t = t->right;
-            f = findtree(t, x);
-        }
+    if (t->left != NULL){
+        f = f + vuvod_v1(t->left, s);
+    }
+    if (t->right != NULL){
+        f = f + vuvod_v1(t->right, s);
     }
     return f;
 }
 
 int vuvod(tree *t, stack **s){
     int f = 0;
+    if (t == NULL){
+        return 0;
+    }
     if (t->right == NULL && t->left == NULL){
         f = f + 1;
         *s = push(t->el, *s);
@@ -62,5 +67,7 @@ int vuvod(tree *t, stack **s){
     if (t->right != NULL){
         f = f + vuvod(t->right, s);
     }
+    *s = push(t->el, *s);
     return f;
 }
+
